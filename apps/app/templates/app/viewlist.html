@@ -6,7 +6,7 @@
     </head>
     <body>
         <h1>Your Lists</h1>
-        <a href="/company">Company Lists</a> | <a href="/logout">Logout</a>
+        <a href="/">All Lists</a> | <a href="/company">Company Lists</a> | {% if user.is_admin %}<a href="/admins">Admin Page</a> | {% endif %}<a href="/logout">Logout</a>
         <h3>Create a New List</h3>
         {% if messages %}
             {% for message in messages %}
@@ -15,7 +15,7 @@
                 {% endif %}
             {% endfor %}
         {% endif %}
-        <form action="/createlist" method="POST">
+        <form action="/createlist/{{this_list.id}}" method="POST">
             {% csrf_token %}
             Title: <input type="text" name="title" placeholder="title"/><br>
             Description:<br>
@@ -32,21 +32,110 @@
             </thead>
             <tbody>
             {% if lists %}
-                {% for list in lists %}
-                    <tr>
-                        <td>{{ list.title }}</td>
-                        <td>{{ list.tasks.count }}</td>
-                    </tr>
-                {% endfor %}
+            {% for list in lists %}
+                <tr>
+                    <td><a href="/lists/{{list.id}}">{{ list.title }}</a></td>
+                    <td>{{ list.tasks.count }}</td>
+                </tr>
+            {% endfor %}
             {% endif %}
             </tbody>
         </table>
+
         <h3>{{ this_list.title }}</h3>
         {% if this_list.description %}
-        <h4>{{ this_list.description }}</h4>
+            <h4>{{ this_list.description }}</h4>
+            <h4>{{ this_list.users.count }} users</h4>
         {% endif %}
-        {% for task in this_list_tasks %}
-            <p>{{ task.title }}</p>
+        <table>
+        {% for task in my_todo_tasks %}
+            <tr>
+                <td><form action="/tasks/status/{{task.id}}/{{this_list.id}}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="" />
+                </form></td>
+                <td>{{ task.is_complete }}</td>
+                <td>{{ task.title }}</td>
+                <td>{{ task.due_date | date:'m-d-Y' }}</td>
+                <td>{% if task.creator == user %}
+                    {% if task.users.count < this_list.users.count %}
+                    <form action="/tasks/adduser/{{task.id}}" method="POST">
+                        {% csrf_token %}
+                        <select name="user">
+                            <option value="" selected disabled hidden>Choose here</option>
+                            {% for one_user in this_list.users.all %}
+                                {% if one_user not in task.users.all %}
+                                <option value="{{one_user.id}}">{{one_user.first_name}} {{one_user.last_name}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="add user"/>
+                    </form>
+                    {% endif %}
+                    {% if task.users.count > 1 %}
+                    <form action="/tasks/removeuser/{{task.id}}" method="POST">
+                        {% csrf_token %}
+                        <select name="user">
+                            <option value="" selected disabled hidden>Choose here</option>
+                        {% for one_user in this_list.users.all %}
+                            {% if one_user in task.users.all and one_user != user %}
+                                <option value="{{one_user.id}}">{{one_user.first_name}} {{one_user.last_name}}</option>
+                            {% endif %}
+                        {% endfor %}
+                        </select>
+                        <input type="submit" value="Remove User"/>
+                    </form>
+                    {% endif %}
+                    <a href="/tasks/delete/{{task.id}}">Delete</a>
+                {% endif %}</td>
+            </tr>
         {% endfor %}
+        {% for task in other_todo_tasks %}
+            <tr>
+                <td></td>
+                <td>{{ task.is_complete }}</td>
+                <td>{{ task.title }}</td>
+                <td>{{ task.due_date | date:'m-d-Y' }}</td>
+                <td></td>
+            </tr>
+        {% endfor %}
+        {% for task in my_completed_tasks %}
+            <tr>
+                <td><form action="/tasks/status/{{task.id}}/{{this_list.id}}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="" />
+                </form></td>
+                <td>{{ task.is_complete }}</td>
+                <td>{{ task.title }}</td>
+                <td>{{ task.due_date | date:'m-d-Y' }}</td>
+                <td>{% if task.creator == user %}
+                    <a href="/tasks/delete/{{task.id}}">Delete</a>
+                {% endif %}</td>
+            </tr>
+        {% endfor %}
+        {% for task in other_completed_tasks %}
+            <tr>
+                <td></td>
+                <td>{{ task.is_complete }}</td>
+                <td>{{ task.title }}</td>
+                <td>{{ task.due_date | date:'m-d-Y' }}</td>
+                <td></td>
+            </tr>
+        {% endfor %}
+
+        <h3>Create a New Task</h3>
+        {% if messages %}
+            {% for message in messages %}
+                {% if 'task' in message.tags %}
+                    {{ message }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <form action="/createtask/{{this_list.id}}" method="POST">
+            {% csrf_token %}
+            Task: <input type="text" name="title" placeholder="task"/><br>
+            Due Date: <input type="date" name="due_date"/><br>
+            <input type="submit" value="Add Task"/>
+        </form>
     </body>
 </html>

@@ -6,6 +6,40 @@
     </head>
     <body>
         <h1>Company Lists</h1>
-        <a href="/">Your Lists</a> | <a href="/logout">Logout</a>
+        <a href="/">Your Lists</a> | {% if user.is_admin %}<a href="/admins">Admin Page</a> | {% endif %}<a href="/logout">Logout</a>
+        <h3>Lists</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>List Title</th>
+                    <th># of Tasks</th>
+                    <th>Users</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if all_lists %}
+                {% for list in all_lists %}
+                    <tr>
+                        <td><a href="/lists/{{list.id}}">{{ list.title }}</a></td>
+                        <td>{{ list.tasks.count }}</td>
+                        <td>{{ list.users.count }}</td>
+                        <td>{% if list.creator == user %}
+                            <form action="/list/adduser/{{list.id}}" method="POST">
+                            {% csrf_token %}
+                            <select name="user">
+                                {% for user in all_users %}
+                                    <option value="{{user.id}}">{{user.first_name}} {{user.last_name}}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="submit" value="add user"/>
+                        </form>
+                        <a href="/lists/delete/{{list.id}}">Delete</a>
+                        {% endif %}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
     </body>
 </html>

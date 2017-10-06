@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Login & Registration</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+      .alert {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+      }
+      .alert a:hover {
+        color: #a94442;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+    <h1>Registration</h1>
+    {% if messages %}
+        {% for message in messages %}
+            {% if 'register' in message.tags %}
+                {{ message }}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <form action="/register" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+        <label class="control-label col-sm-12" for="first_name">First Name:</label>
+        <div class="col-sm-12">
+          <input type="text" class="form-control" name="first_name" placeholder="first name"><br>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-12" for="last_name">Last Name:</label>
+        <div class="col-sm-12">
+          <input type="text" class="form-control" name="last_name" placeholder="last name"><br>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-12" for="email">Email:</label>
+        <div class="col-sm-12">
+          <input type="text" class="form-control" name="email" placeholder="email"><br>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-12" for="password">Password:</label>
+        <div class="col-sm-12">
+          <input type="password" class="form-control" name="password" placeholder="password"><br>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-12" for="pw_confirm">Confirm Password:</label>
+        <div class="col-sm-12">
+          <input type="password" class="form-control" name="pw_confirm" placeholder="confirm password"><br>
+        </div>
+      </div>
+      <div class="form-group col-sm-12">
+        <input type="submit" value="Register" class="btn btn-default">
+      </div>
+    </form>
+    <h1>Login</h1>
+    {% if messages %}
+        {% for message in messages %}
+            {% if 'login' in message.tags %}
+                {{ message }}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <form action="/signin" method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label class="control-label col-sm-12" for="email">Email:</label>
+        <div class="col-sm-12">
+          <input type="text" class="form-control" name="email" placeholder="email"><br>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-12" for="password">Password:</label>
+        <div class="col-sm-12">
+          <input type="password" class="form-control" name="password" placeholder="password"><br>
+        </div>
+      </div>
+      <div class="form-group col-sm-12">
+        <input type="submit" value="Login" class="btn btn-default">
+      </div>
+    </form>
+  </div>
+  </body>
+</html>

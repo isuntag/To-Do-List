@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>To Do List</title>
+    </head>
+    <body>
+        <h1>Your Lists</h1>
+        <a href="/company">Company Lists</a> | <a href="/logout">Logout</a>
+        <h3>Create a New List</h3>
+        {% if messages %}
+            {% for message in messages %}
+                {% if 'list' in message.tags %}
+                    {{ message }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <form action="/createlist" method="POST">
+            {% csrf_token %}
+            Title: <input type="text" name="title" placeholder="title"/><br>
+            Description:<br>
+            <textarea name="description" placeholder="description"></textarea><br>
+            <input type="submit" value="Add List"/>
+        </form>
+        <h3>Lists</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>List Title</th>
+                    <th># of Tasks</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if lists %}
+                {% for list in lists %}
+                    <tr>
+                        <td>{{ list.title }}</td>
+                        <td>{{ list.tasks.count }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+        <h3>{{ this_list.title }}</h3>
+        {% if this_list.description %}
+        <h4>{{ this_list.description }}</h4>
+        {% endif %}
+        {% for task in this_list_tasks %}
+            <p>{{ task.title }}</p>
+        {% endfor %}
+    </body>
+</html>

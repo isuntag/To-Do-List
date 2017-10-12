@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Admin Page</title>
+        {% load static %}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <h1>Admin Page</h1>
+        <a href="{%url 'users:index'%}">Your Lists</a> | <a href="{%url 'users:company'%}">Company Lists</a> | <a href="{%url 'users:logout'%}">Logout</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Current Tasks</th>
+                    <th>Admin</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for one_user in users %}
+                    <tr>
+                        <td>{{one_user.first_name}} {{one_user.last_name}}</td>
+                        <td>{{one_user.email}}</td>
+                        <td>{{one_user.num_tasks}}</td>
+                        <td>{{one_user.is_admin}} {{request.session.user.id}}
+                        {% if user != one_user %}
+                            <form action="{%url 'users:admin'%}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{one_user.id}}">
+                                <input type="submit" value="" />
+                            </form>
+                        {% endif %}</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form action="{%url 'users:admin_registered'%}" method="post" class="form-inline">
+            {% csrf_token %}
+            <div class="form-group">
+            <label class="control-label" for="first_name">First Name:</label>
+              <input type="text" class="form-control" name="first_name" placeholder="first name">
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="last_name">Last Name:</label>
+              <input type="text" class="form-control" name="last_name" placeholder="last name">
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="email">Email:</label>
+              <input type="text" class="form-control" name="email" placeholder="email">
+          </div>
+          <div class="form-group">
+            <input type="submit" value="Add User" class="btn btn-default">
+          </div>
+        </form>
+    </body>
+</html>

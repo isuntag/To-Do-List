@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>To Do List</title>
+    </head>
+    <body>
+        <h1>Your Lists</h1>
+        <h2>Welcome {{ request.session.first_name }}!</h2>
+        <a href="{%url 'users:company'%}">Company Lists</a> | {% if user.is_admin %}<a href="{%url 'users:admin'%}">Admin Page</a> | {% endif %}<a href="{%url 'users:logout'%}">Logout</a>
+        <h3>Create a New List</h3>
+        {% if messages %}
+            {% for message in messages %}
+                {% if 'list' in message.tags %}
+                    {{ message }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <form action="{%url 'lists:add' id=0%}" method="POST">
+            {% csrf_token %}
+            Title: <input type="text" name="title" placeholder="title"/><br>
+            Description:<br>
+            <textarea name="description" placeholder="description"></textarea><br>
+            <input type="submit" value="Add List"/>
+        </form>
+        <h3>Lists</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>List Title</th>
+                    <th># of Tasks</th>
+                    <th>Users</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if lists %}
+                {% for list in lists %}
+                    <tr>
+                        <td><a href="{%url 'lists:add' id=list.id%}">{{ list.title }}</a></td>
+                        <td>{{ list.num_tasks }}</td>
+                        <td>{{ list.users.count }}</td>
+                        <td>{% if list.creator == user %}
+                            {% if list.users.count < all_users.count %}
+                            <form action="{%url 'lists:adduser' id=list.id%}" method="POST">
+                                {% csrf_token %}
+                                <select name="user">
+                                    <option value="" selected disabled hidden>Choose here</option>
+                                {% for one_user in all_users %}
+                                    {% if one_user not in list.users.all %}
+                                        <option value="{{one_user.id}}">{{one_user.first_name}} {{one_user.last_name}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                                </select>
+                                <input type="submit" value="Add User"/>
+                            </form>
+                            {% endif %}
+                            {% if list.users.all.count > 1 %}
+                            <form action="{%url 'lists:removeuser' id=list.id%}" method="POST">
+                                {% csrf_token %}
+                                <select name="user">
+                                    <option value="" selected disabled hidden>Choose here</option>
+                                {% for one_user in all_users %}
+                                    {% if one_user in list.users.all and one_user != user %}
+                                        <option value="{{one_user.id}}">{{one_user.first_name}} {{one_user.last_name}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                                </select>
+                                <input type="submit" value="Remove User"/>
+                            </form>
+                            {% endif %}
+                        <a href="{%url 'lists:delete' id=list.id%}">Delete</a>
+                        {% endif %}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </body>
+</html>

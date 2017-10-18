@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 
 from datetime import datetime, timedelta
+from django.utils import timezone
 
 from ..users_app.models import User
 from ..lists_app.models import List
@@ -30,4 +31,8 @@ class Task(models.Model):
     @property
     def is_complete(self):
         return bool(self.completed)
+    def is_overdue(self):
+        return bool(timezone.now() >= self.due_date)
+    def is_due_soon(self):
+        return bool(timezone.now()+timedelta(days=7) > self.due_date)
     objects = TaskManager()

@@ -8,10 +8,27 @@ import bcrypt
 
 from datetime import datetime, timedelta
 
+class CompanyManager(models.Manager):
+    def validation(self, postData):
+        errors = {}
+        if len(postData['name']) < 1:
+            errors['name'] = "Please enter a name."
+        if len(postData['email']) < 1:
+            errors['email'] = "Please enter your email."
+        elif not re.match('[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})',postData['email']):
+            errors['email'] = "Incorrect email format."
+        elif any(s in postData['email'] for s in ["aol.com", "att.net", "comcast.net", "facebook.com", "gmail.com", "gmx.com", "googlemail.com", "google.com", "hotmail.com", "hotmail.co.uk", "mac.com", "me.com", "mail.com", "msn.com", "live.com", "sbcglobal.net", "verizon.net", "yahoo.com", "yahoo.co.uk"]):
+            errors['email'] = "Incorrect company email domain."
+        elif Company.objects.filter(email=postData['email']):
+            errors['email'] = "Company is already registered."
+        return errors
+
 class Company(models.Model):
     name = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
+    objects = CompanyManager()
 
 class UserManager(models.Manager):
     def validation(self, postData):
@@ -31,8 +48,8 @@ class UserManager(models.Manager):
         if len(postData['email']) < 1:
             errors['email'] = "Please enter your email."
         elif User.objects.filter(email=postData['email']):
-            errors['email'] = "Email is already taken"
-        elif not re.match('[A-Za-z0-9-_]+(.[A-Za-z0-9-_]+)*@[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})',postData['email']):
+            errors['email'] = "Email is already taken."
+        elif not re.match('[A-Za-z0-9-_]+(.[A-Za-z0-9-_]+)*@[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})',postData['email']):
             errors['email'] = "Incorrect email format."
         if len(postData['password']) < 1:
             errors['password'] = "Please enter a password."
@@ -59,7 +76,7 @@ class UserManager(models.Manager):
             errors['email'] = "Please enter your email."
         elif User.objects.filter(email=postData['email']):
             errors['email'] = "Email is already taken"
-        elif not re.match('[A-Za-z0-9-_]+(.[A-Za-z0-9-_]+)*@[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})',postData['email']):
+        elif not re.match('[A-Za-z0-9-_]+(.[A-Za-z0-9-_]+)*@[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})',postData['email']):
             errors['email'] = "Incorrect email format."
         return errors
     def update_user(self, postData):
@@ -100,7 +117,7 @@ class User(models.Model):
     email = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
     admin = models.BooleanField(default=0)
-    company = models.ForeignKey(Company, related_name="users", blank=True, null=True)
+    company = models.ForeignKey(Company, related_name="users")
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
     @property

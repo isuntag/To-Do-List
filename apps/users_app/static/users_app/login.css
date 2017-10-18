@@ -1,0 +1,50 @@
+.container {
+    text-align: center;
+    padding-top: 50px;
+    font: 300 15pt 'Helvetica Neue', sans-serif;
+}
+.module {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: none;
+}
+h1 {
+    font: 200 60pt 'Helvetica Neue', sans-serif;
+    color: #25B4E9;
+    margin-bottom: 25px;
+}
+a, a:visited {
+    color: #95989A;
+    text-decoration: none;
+}
+a:hover {
+    color: #25B4E9;
+    text-decoration: none;
+}
+.form-control {
+    border: 1px solid #95989A;
+    border-radius: 20px;
+    color: #434544;
+    margin-bottom: 25px;
+    text-align: center;
+}
+input[type=submit] {
+    background-color: #F7F7F7;
+}
+::-webkit-input-placeholder {
+    text-align: center;
+    color: #95989A !important;
+}
+:-moz-placeholder {
+    text-align: center;
+    color: #95989A !important;
+}
+::-moz-placeholder {
+    text-align: center;
+    color: #95989A !important;
+}
+:-ms-input-placeholder {
+    text-align: center;
+    color: #95989A !important;
+}

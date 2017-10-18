@@ -27,19 +27,34 @@
                         <td>{{one_user.first_name}} {{one_user.last_name}}</td>
                         <td>{{one_user.email}}</td>
                         <td>{{one_user.num_tasks}}</td>
-                        <td>{{one_user.is_admin}} {{request.session.user.id}}
-                        {% if user != one_user %}
+                        <td>{{one_user.is_admin}}
+                        {% if one_user != user %}
                             <form action="{%url 'users:admin'%}" method="POST">
                                 {% csrf_token %}
                                 <input type="hidden" name="id" value="{{one_user.id}}">
                                 <input type="submit" value="" />
                             </form>
                         {% endif %}</td>
-                        <td></td>
+                        <td>
+                        {% if one_user != user and not one_user.is_admin %}
+                            <form action="{%url 'users:delete'%}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{one_user.id}}">
+                                <input type="submit" value="Remove User" />
+                            </form>
+                        {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
+        {% if messages %}
+            {% for message in messages %}
+                {% if 'register' in message.tags %}
+                    {{ message }}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
         <form action="{%url 'users:admin_registered'%}" method="post" class="form-inline">
             {% csrf_token %}
             <div class="form-group">

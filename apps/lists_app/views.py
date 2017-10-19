@@ -30,8 +30,7 @@ def createviewlist(request, id):
                 'this_list': List.objects.get(id=id),
                 'my_todo_tasks': List.objects.get(id=id).tasks.filter(completed=0, users__id=request.session['id']).order_by('due_date'),
                 'other_todo_tasks': List.objects.get(id=id).tasks.filter(completed=0).exclude(users__id=request.session['id']).order_by('due_date'),
-                'my_completed_tasks': List.objects.get(id=id).tasks.filter(completed=1, users__id=request.session['id']).order_by('due_date'),
-                'other_completed_tasks': List.objects.get(id=id).tasks.filter(completed=1).exclude(users__id=request.session['id']).order_by('due_date'),
+                'completed_tasks': List.objects.get(id=id).tasks.filter(completed=1).order_by('due_date'),
                 'lists': List.objects.filter(users__id=request.session['id']).annotate(num_tasks=Sum(
                     Case(
                         When(tasks__completed=0, then=1),

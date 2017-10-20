@@ -12,18 +12,11 @@ def index(request):
     if 'id' not in request.session:
         return redirect(reverse('users:loginpage'))
     else:
-        content = {
-            'lists': List.objects.filter(users__id=request.session['id']).annotate(num_tasks=Sum(
-                Case(
-                    When(tasks__completed=0, then=1),
-                    default=0,
-                    output_field=IntegerField()
-                )
-            )),
-            'user': User.objects.get(id=request.session['id']),
-            'all_users': User.objects.all()
-        }
-        return render(request, 'users_app/index.html', content)
+        lists = List.objects.filter(users__id=request.session['id']).first()
+        if not lists:
+            return redirect(reverse('users:company'))
+        else:
+            return redirect(reverse('lists:add', kwargs={'id': lists.id}))
 
 def company(request):
     if request.method == "GET":

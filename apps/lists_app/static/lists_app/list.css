@@ -32,9 +32,14 @@ html, body, body div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquot
         font-size: 1.3em;
     }
 }
-.nopadding {
+.main .row {
+	padding: 0 20px;
+}
+
+.table-responsive {
 	padding: 0 !important;
 	margin: 0 !important;
+	border: 0 !important;
 }
 .circle {
 	color: #95989A;
@@ -54,6 +59,17 @@ html, body, body div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquot
 .circle form {
 	display: inline-block;
 }
+.sidebar .icon {
+	color: #95989A;
+	font-size: 3em;
+	display: inline-block;
+	padding: 10px;
+	background: #FFFFFF;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+	text-align: center;
+}
 .users {
 	color: #95989A;
 	width: 100px;
@@ -65,7 +81,7 @@ html, body, body div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquot
 	border-radius: 70px;
 	text-align: center;
 	margin: 0 0 0 auto;
-	font-size: 4em;
+	font-size: 3em;
 }
 .empty {
 	background: none;
@@ -73,7 +89,53 @@ html, body, body div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquot
 	padding: 0;
 	margin: 0;
 }
-
+.links div {
+	font-size: 0.85em;
+	text-transform: uppercase;
+}
+.links a, .links a:hover {
+	color: #95989A;
+	text-decoration: none;
+}
+.links a.active, .links a.active:hover {
+	color: #25B4E9;
+}
+.links ul li {
+	padding: 10px;
+	text-align: left;
+	display: inline-block;
+}
+.logout {
+	padding: 10px;
+}
+.main {
+	padding: 0;
+}
+@media screen and (max-width: 767px) {
+	.links ul li {
+		display: block;
+		width: 100%;
+		text-align: center;
+	}
+	.logout {
+		text-align: center !important;
+	}
+}
+@media screen and (min-width: 768px) {
+	.links ul li {
+		display: inline-block;
+	}
+	.logout {
+		text-align: right !important;
+	}
+	.sidebar {
+		position: fixed;
+		left: 0;
+		top: 0;
+		overflow: scroll;
+		height: 100%;
+	}
+}
 .table th, .table td {
     border: none !important;
 	vertical-align: middle !important;
@@ -100,7 +162,10 @@ table tr.completed {
 .check {
     background: #FFFFFF;
 	border: 1px solid #95989A;
-    height: 25%;
+    height: 25px;
+	-moz-border-radius: 70px;
+	-webkit-border-radius: 70px;
+	border-radius: 70px;
 }
 .overdue .check {
 	border: 1px solid #E92525 !important;
@@ -119,25 +184,31 @@ tr.active .unselectable {
     background-color: #F7F7F7;
     color: #434544;
     text-align: center;
-	height: 100%;
+	padding: 10px 0;
+	top: 0;
+	left: 0;
 }
-.links {
-	height: 50px;
-}
-ul {
+.sidebar ul {
     list-style-type: none;
-    padding: 0;
+	margin: 10px 0;
 }
-li {
+.sidebar li {
     background-color: #FFFFFF;
-    padding: 25px 0;
+    padding: 20px 0;
 }
-li.selected {
-    background-color: #F7F7F7;
+.sidebar li.selected {
     border-top: 1px solid #25B4E9;
     border-bottom: 1px solid #25B4E9;
     border-right: 20px solid #25B4E9;
     padding-left: 20px;
+}
+.sidebar li a, .sidebar li a:hover {
+	color: #95989A;
+	text-decoration: none;
+}
+.sidebar li.selected a, .sidebar li.selected a:hover {
+	color: #434544;
+	text-decoration: none;
 }
 h1 {
     font-size: 4em;

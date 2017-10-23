@@ -95,7 +95,7 @@
                             <td>{{ task.due_date | date:'m-d-Y' }}</td>
                             <td class="text-center">
                                 <div class="circle">
-                                    <button data-toggle="modal" data-target="#{{task.id}}" class="empty">{{task.users.count}}</button>
+                                    <button class="empty modal_toggle" task="{{task.id}}" data-toggle="modal" data-target="#modal">{{task.users.count}}</button>
                                 </div>
                             </td>
                             <td class="text-center">
@@ -106,7 +106,7 @@
                                     <form action="{%url 'tasks:removeuser' id=task.id%}" method="POST">
                                         {% csrf_token %}
                                         <input type="hidden" name="user" value="{{user.id}}"/>
-                                        <button type="submit" class="empty">
+                                        <button type="submit">
                                             <span class="glyphicon glyphicon-minus"></span>
                                         </button>
                                     </form>
@@ -122,7 +122,7 @@
                             <td>{{ task.due_date | date:'m-d-Y' }}</td>
                             <td class="text-center">
                                 <div class="circle">
-                                    <button data-toggle="modal" data-target="#{{task.id}}" class="empty">{{task.users.count}}</button>
+                                    <button class="empty modal_toggle" task="{{task.id}}" data-toggle="modal" data-target="#modal">{{task.users.count}}</button>
                                 </div>
                             </td>
                             <td class="text-center">
@@ -131,7 +131,7 @@
                                     <form action="{%url 'tasks:adduser' id=task.id%}" method="POST">
                                         {% csrf_token %}
                                         <input type="hidden" name="user" value="{{user.id}}"/>
-                                        <button type="submit" class="empty">
+                                        <button class="empty" type="submit">
                                             <span class="glyphicon glyphicon-plus"></span>
                                         </button>
                                     </form>
@@ -154,7 +154,7 @@
                             <td>{{ task.due_date | date:'m-d-Y' }}</td>
                             <td class="text-center">
                                 <div class="circle">
-                                    <button data-toggle="modal" data-target="#{{task.id}}" class="empty toggle_modal">{{task.users.count}}</button>
+                                    <button class="empty modal_toggle" task="{{task.id}}" data-toggle="modal" data-target="#modal">{{task.users.count}}</button>
                                 </div>
                             </td>
                             <td class="text-center">
@@ -184,67 +184,8 @@
                 </div>
             </div>
         </div>
-        {% for task in all_tasks %}
-        <div id="{{task.id}}" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">{{task.title}}</h4>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table">
-                            {% for task_user in task.users.all %}
-                            <tr>
-                                <td>{{task_user.first_name}} {{task_user.last_name}}</td>
-                                <td>
-                                {% if task.creator == user and task_user != user %}
-                                    <form class="{{task.id}}" action="{%url 'tasks:removeuser' id=task.id%}" method="POST">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="user" value="{{task_user.id}}"/>
-                                        <button type="submit" class="empty">
-                                            <span class="glyphicon glyphicon-minus"></span>
-                                        </button>
-                                    </form>
-                                {% endif %}
-                                {% if user != task.creator and task_user == user %}
-                                    <form class="add_user" action="{%url 'tasks:removeuser' id=task.id%}" method="POST">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="user" value="{{task_user.id}}"/>
-                                        <button type="submit" class="empty">
-                                            <span class="glyphicon glyphicon-minus"></span>
-                                        </button>
-                                    </form>
-                                {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </table>
-                        {% if task.creator == user %}
-                            {% if task.users.count < this_list.users.count %}
-                            <form action="{%url 'tasks:adduser' id=task.id%}" method="POST">
-                                {% csrf_token %}
-                                <input type="hidden" name="modal" value="{{task.id}}">
-                                <select name="user">
-                                    <option value="" selected disabled hidden>Choose here</option>
-                                    {% for one_user in this_list.users.all %}
-                                        {% if one_user not in task.users.all %}
-                                        <option value="{{one_user.id}}">{{one_user.first_name}} {{one_user.last_name}}</option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                                <input type="submit" value="add user"/>
-                            </form>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
+        <div id="modal" class="modal fade" role="dialog">
         </div>
-        {% endfor %}
     </div>
     </body>
 </html>

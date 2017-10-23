@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
+from django.http import JsonResponse
 from .models import Task
 from ..users_app.models import User
 from ..lists_app.models import List
@@ -40,7 +41,10 @@ def removeusertask(request, id):
             this_task.users.remove(User.objects.get(id=request.POST['user']))
         elif User.objects.get(id=request.session['id']) in this_task.users.all() and User.objects.get(id=request.session['id']) != this_task.creator:
             this_task.users.remove(User.objects.get(id=request.session['id']))
-    return redirect(reverse('lists:add', kwargs={'id': this_task.assignedlist.id }))
+    if 'modal' in request.POST:
+        return JsonResponse({})
+    else:
+        return redirect(reverse('lists:add', kwargs={'id': this_task.assignedlist.id }))
 
 def changetaskstatus(request, taskid, listid):
     this_task = Task.objects.get(id=taskid)
@@ -56,3 +60,10 @@ def deletetask(request, id):
     if this_task.creator == User.objects.get(id=request.session['id']):
         this_task.delete()
     return redirect(reverse('lists:add', kwargs={'id': this_task.assignedlist.id }))
+
+def task_users(request, id):
+    content = {
+        'user': User.objects.get(id=request.session['id']),
+        'task': Task.objects.get(id=id)
+    }
+    return render(request, 'tasks_app/task_users.html', content)

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>To Do List</title>
+        {% load static %}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="{% static 'tasks_app/tasks.js' %}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'lists_app/list.css' %}" />
+    </head>
+    <body>
+    <div class="container-fluid">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{{task.title}}</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                    {% for task_user in task.users.all %}
+                    <tr>
+                        <td>{{task_user.first_name}} {{task_user.last_name}}</td>
+                        <td>
+                        {% if task.creator == user and task_user != user %}
+                            <form class="remove_user" action="{%url 'tasks:removeuser' id=task.id%}" method="POST" task="{{task.id}}">
+                                {% csrf_token %}
+                                <input type="hidden" name="user" value="{{task_user.id}}"/>
+                                <input type="hidden" name="modal" value=""/>
+                                <button type="submit" class="empty">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                            </form>
+                        {% endif %}
+                        {% if user != task.creator and task_user == user %}
+                            <form class="remove_user" action="{%url 'tasks:removeuser' id=task.id%}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="user" value="{{task_user.id}}"/>
+                                <button type="submit" class="empty">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                            </form>
+                        {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </table>
+                    {% if task.creator == user %}
+                    {% if task.users.count < task.assignedlist.users.count %}
+                    <form action="{%url 'tasks:adduser' id=task.id%}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="modal" value="{{task.id}}">
+                        <select name="user">
+                            <option value="" selected disabled hidden>Choose here</option>
+                            {% for one_user in task.assignedlist.users.all %}
+                                {% if one_user not in task.users.all %}
+                                <option value="{{one_user.id}}">{{one_user.first_name}} {{one_user.last_name}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="add user"/>
+                    </form>
+                    {% endif %}
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

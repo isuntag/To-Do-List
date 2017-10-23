@@ -44,8 +44,9 @@ html, body, body div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquot
 .circle {
 	color: #95989A;
 	display: inline-block;
-	height: 100%;
-	padding: 10px;
+	height: 50px;
+	width: 50px;
+	line-height: 50px;
 	background: #FFFFFF;
 	-moz-border-radius: 50%;
 	-webkit-border-radius: 50%;
@@ -59,11 +60,16 @@ html, body, body div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquot
 .circle form {
 	display: inline-block;
 }
+.circle span {
+	line-height: 50px;
+}
 .sidebar .icon {
 	color: #95989A;
 	font-size: 3em;
 	display: inline-block;
-	padding: 10px;
+	height: 100px;
+	width: 100px;
+	line-height: 100px;
 	background: #FFFFFF;
 	-moz-border-radius: 50%;
 	-webkit-border-radius: 50%;
@@ -163,6 +169,7 @@ table tr.completed {
     background: #FFFFFF;
 	border: 1px solid #95989A;
     height: 25px;
+	width: 25px;
 	-moz-border-radius: 70px;
 	-webkit-border-radius: 70px;
 	border-radius: 70px;

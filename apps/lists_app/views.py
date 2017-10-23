@@ -28,6 +28,7 @@ def createviewlist(request, id):
         else:
             content = {
                 'this_list': List.objects.get(id=id),
+                'all_tasks': List.objects.get(id=id).tasks.all(),
                 'my_todo_tasks': List.objects.get(id=id).tasks.filter(completed=0, users__id=request.session['id']).order_by('due_date'),
                 'other_todo_tasks': List.objects.get(id=id).tasks.filter(completed=0).exclude(users__id=request.session['id']).order_by('due_date'),
                 'completed_tasks': List.objects.get(id=id).tasks.filter(completed=1).order_by('due_date'),

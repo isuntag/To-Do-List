@@ -28,7 +28,10 @@ def addusertask(request, id):
             this_task.users.add(User.objects.get(id=request.POST['user']))
         elif User.objects.get(id=request.session['id']) in this_task.assignedlist.users.all():
             this_task.users.add(User.objects.get(id=request.session['id']))
-    return redirect(reverse('lists:add', kwargs={'id': this_task.assignedlist.id }))
+    if 'modal' in request.POST:
+        return redirect('{}#{}'.format(reverse('lists:add', kwargs={'id': this_task.assignedlist.id }), this_task.id))
+    else:
+        return redirect(reverse('lists:add', kwargs={'id': this_task.assignedlist.id }))
 
 def removeusertask(request, id):
     this_task = Task.objects.get(id=id)

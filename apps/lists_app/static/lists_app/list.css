@@ -222,3 +222,7 @@ h1 {
     color: #25B4E9;
     font-weight: 300;
 }
+.modal-backdrop
+{
+    opacity:0.5 !important;
+}

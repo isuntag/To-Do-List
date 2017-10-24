@@ -38,21 +38,27 @@
                 {% endfor %}
                 </ul>
                 {% endif %}
-                <h3>Create a New List</h3>
-                {% if messages %}
-                    {% for message in messages %}
-                        {% if 'list' in message.tags %}
-                            {{ message }}
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-                <form action="{%url 'lists:add' id=this_list.id %}" method="POST">
-                    {% csrf_token %}
-                    Title: <input type="text" name="title" placeholder="title"/><br>
-                    Description:<br>
-                    <textarea name="description" placeholder="description"></textarea><br>
-                    <input type="submit" value="Add List"/>
-                </form>
+                <div class="add_list">
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if 'list' in message.tags %}
+                                {{ message }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    <form action="{%url 'lists:add' id=this_list.id %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group col-sm-12">
+                            <input type="text" name="title" placeholder="Title" class="form-control input-lg">
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <textarea rows="2" name="description" placeholder="Description" class="form-control input-lg"></textarea>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <input type="submit" value="Create List" class="form-control input-lg">
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="main col-xs-12 col-sm-9 col-sm-offset-3">
                 <div class="row">
@@ -106,7 +112,7 @@
                                     <form action="{%url 'tasks:removeuser' id=task.id%}" method="POST">
                                         {% csrf_token %}
                                         <input type="hidden" name="user" value="{{user.id}}"/>
-                                        <button type="submit">
+                                        <button type="submit" class="empty">
                                             <span class="glyphicon glyphicon-minus"></span>
                                         </button>
                                     </form>
@@ -167,7 +173,6 @@
                         </tr>
                     {% endfor %}
                     </table>
-                    <h3>Create a New Task</h3>
                     {% if messages %}
                         {% for message in messages %}
                             {% if 'task' in message.tags %}
@@ -175,11 +180,19 @@
                             {% endif %}
                         {% endfor %}
                     {% endif %}
-                    <form action="{%url 'tasks:add' id=this_list.id%}" method="POST">
+                    <form action="{%url 'tasks:add' id=this_list.id%}" method="POST" class="form-inline">
                         {% csrf_token %}
-                        Task: <input type="text" name="title" placeholder="task"/><br>
-                        Due Date: <input type="date" name="due_date"/><br>
-                        <input type="submit" value="Add Task"/>
+                        <div class="row">
+                            <div class="form-group col-sm-12 col-md-7">
+                                <input type="text" name="title" placeholder="Task" class="form-control input-lg"/>
+                            </div>
+                            <div class="form-group col-sm-6 col-md-3">
+                                <input type="date" name="due_date" class="form-control input-lg"/>
+                            </div>
+                            <div class="form-group col-sm-6 col-md-2">
+                                <input type="submit" value="Add Task" class="form-control input-lg"/>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>

@@ -29,9 +29,10 @@
                             </form>
                         {% endif %}
                         {% if user != task.creator and task_user == user %}
-                            <form class="remove_user" action="{%url 'tasks:removeuser' id=task.id%}" method="POST">
+                            <form class="remove_user" action="{%url 'tasks:removeuser' id=task.id%}" method="POST" task="{{task.id}}">
                                 {% csrf_token %}
                                 <input type="hidden" name="user" value="{{task_user.id}}"/>
+                                <input type="hidden" name="modal" value=""/>
                                 <button type="submit" class="empty">
                                     <span class="glyphicon glyphicon-minus"></span>
                                 </button>
@@ -43,7 +44,7 @@
                     </table>
                     {% if task.creator == user %}
                     {% if task.users.count < task.assignedlist.users.count %}
-                    <form action="{%url 'tasks:adduser' id=task.id%}" method="POST">
+                    <form class="add_user" action="{%url 'tasks:adduser' id=task.id%}" method="POST" task="{{task.id}}">
                         {% csrf_token %}
                         <input type="hidden" name="modal" value="{{task.id}}">
                         <select name="user">

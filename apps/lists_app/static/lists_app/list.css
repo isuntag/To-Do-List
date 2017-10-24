@@ -141,6 +141,25 @@ html, body, body div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquot
 		overflow: scroll;
 		height: 100%;
 	}
+	.form-inline .form-control {
+		width: 100% !important;
+	}
+}
+@media
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+	table, thead, tbody, th, td, tr {
+		display: block;
+	}
+	td {
+		border: none;
+		border-bottom: 1px solid #eee;
+		position: relative;
+		/*padding-left: 50%;*/
+		text-align: center;
+		overflow: auto;
+		width: 100%;
+	}
 }
 .table th, .table td {
     border: none !important;
@@ -222,7 +241,36 @@ h1 {
     color: #25B4E9;
     font-weight: 300;
 }
-.modal-backdrop
-{
-    opacity:0.5 !important;
+textarea {
+	max-width: 100%;
+}
+
+.form-control {
+    border: 1px solid #95989A;
+    border-radius: 20px;
+    color: #434544;
+    margin-bottom: 25px;
+    text-align: center;
+}
+input[type=submit] {
+    background-color: #F7F7F7;
+}
+.input-lg {
+	font-size: .8em;
+}
+::-webkit-input-placeholder {
+    text-align: center;
+    color: #95989A !important;
+}
+:-moz-placeholder {
+    text-align: center;
+    color: #95989A !important;
+}
+::-moz-placeholder {
+    text-align: center;
+    color: #95989A !important;
+}
+:-ms-input-placeholder {
+    text-align: center;
+    color: #95989A !important;
 }

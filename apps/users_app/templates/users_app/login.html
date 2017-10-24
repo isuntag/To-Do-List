@@ -50,7 +50,7 @@
                     {% endif %}
                 {% endfor %}
             {% endif %}
-            <form action="{%url 'users:loginpage'%}" method="post">
+            <form action="{%url 'users:loginpage'%}" method="post" class="form-inline">
                 {% csrf_token %}
                 <div class="form-group col-sm-12">
                     <input type="text" class="form-control input-lg" name="first_name" placeholder="First Name">

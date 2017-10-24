@@ -30,7 +30,7 @@ def addusertask(request, id):
         elif User.objects.get(id=request.session['id']) in this_task.assignedlist.users.all():
             this_task.users.add(User.objects.get(id=request.session['id']))
     if 'modal' in request.POST:
-        return redirect('{}#{}'.format(reverse('lists:add', kwargs={'id': this_task.assignedlist.id }), this_task.id))
+        return JsonResponse({})
     else:
         return redirect(reverse('lists:add', kwargs={'id': this_task.assignedlist.id }))
 

@@ -23,7 +23,7 @@ def createviewlist(request, id):
     if request.method == 'GET':
         if 'id' not in request.session:
             return redirect(reverse('users:loginpage'))
-        elif User.objects.get(id=request.session['id']) not in List.objects.get(id=id).users.all():
+        elif User.objects.get(id=request.session['id']).company != List.objects.get(id=id).creator.company:
             return redirect(reverse('users:index'))
         else:
             content = {
@@ -48,21 +48,36 @@ def createviewlist(request, id):
             return render(request, 'lists_app/viewlist.html', content, lists)
 
 def adduserlist(request, id):
+    this_list = List.objects.get(id=id)
     if request.method == 'POST' and 'user' in request.POST:
-        this_list = List.objects.get(id=id)
         if this_list.creator == User.objects.get(id=request.session['id']):
             this_list.users.add(User.objects.get(id=request.POST['user']))
-    return redirect(reverse('users:index'))
+    if 'modal' in request.POST:
+        return JsonResponse({})
+    else:
+        return redirect(reverse('users:index'))
 
 def removeuserlist(request, id):
+    this_list = List.objects.get(id=id)
     if request.method == 'POST' and 'user' in request.POST:
-        this_list = List.objects.get(id=id)
         if this_list.creator == User.objects.get(id=request.session['id']) and User.objects.get(id=request.POST['user']) != this_list.creator:
             this_list.users.remove(User.objects.get(id=request.POST['user']))
-    return redirect(reverse('users:index'))
+        elif User.objects.get(id=request.session['id']) in this_list.users.all() and User.objects.get(id=request.session['id']) != this_list.creator:
+            this_list.users.remove(User.objects.get(id=request.session['id']))
+    if 'modal' in request.POST:
+        return JsonResponse({})
+    else:
+        return redirect(reverse('users:index'))
 
 def deletelist(request, id):
     this_list = List.objects.get(id=id)
     if this_list.creator == User.objects.get(id=request.session['id']):
         this_list.delete()
-    return redirect(reverse('users:index'))
+    return redirect(reverse('users:company'))
+
+def list_users(request, id):
+    content = {
+        'user': User.objects.get(id=request.session['id']),
+        'list': List.objects.get(id=id)
+    }
+    return render(request, 'lists_app/list_users.html', content)

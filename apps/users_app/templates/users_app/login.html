@@ -26,13 +26,13 @@
             {% endif %}
             <form action="{%url 'users:signin'%}" method="post">
                 {% csrf_token %}
-                <div class="form-group col-lg-12">
+                <div class="form-group col-xs-12">
                     <input type="text" class="form-control input-lg" name="email" placeholder="Email">
                 </div>
-                <div class="form-group col-lg-12">
+                <div class="form-group col-xs-12">
                     <input type="password" class="form-control input-lg" name="password" placeholder="Password">
                 </div>
-                <div class="form-group col-sm-12">
+                <div class="form-group col-xs-12">
                     <input type="submit" value="Login" class="form-control input-lg">
                 </div>
             </form>
@@ -52,22 +52,22 @@
             {% endif %}
             <form action="{%url 'users:loginpage'%}" method="post" class="form-inline">
                 {% csrf_token %}
-                <div class="form-group col-sm-12">
+                <div class="form-group col-xs-12">
                     <input type="text" class="form-control input-lg" name="first_name" placeholder="First Name">
                 </div>
-                <div class="form-group col-lg-12">
+                <div class="form-group col-xs-12">
                     <input type="text" class="form-control input-lg" name="last_name" placeholder="Last Name">
                 </div>
-                <div class="form-group col-lg-12">
+                <div class="form-group col-xs-12">
                     <input type="text" class="form-control input-lg" name="email" placeholder="Email">
                 </div>
-                <div class="form-group col-lg-12">
+                <div class="form-group col-xs-12">
                     <input type="password" class="form-control input-lg" name="password" placeholder="Password">
                 </div>
-                <div class="form-group col-lg-12">
+                <div class="form-group col-xs-12">
                     <input type="password" class="form-control input-lg" name="pw_confirm" placeholder="Confirm Password">
                 </div>
-                <div class="form-group col-lg-12">
+                <div class="form-group col-xs-12">
                     <input type="submit" value="Register" class="form-control input-lg">
                 </div>
             </form>
@@ -87,13 +87,13 @@
             {% endif %}
             <form action="{%url 'users:company'%}" method="post">
                 {% csrf_token %}
-                <div class="form-group col-lg-12">
+                <div class="form-group col-xs-12">
                     <input type="text" class="form-control input-lg" name="name" placeholder="Company Name">
                 </div>
-                <div class="form-group col-lg-12">
+                <div class="form-group col-xs-12">
                     <input type="text" class="form-control input-lg" name="email" placeholder="Your Email">
                 </div>
-                <div class="form-group col-lg-12">
+                <div class="form-group col-xs-12">
                     <input type="submit" value="Register Company" class="form-control input-lg">
                 </div>
             </form>

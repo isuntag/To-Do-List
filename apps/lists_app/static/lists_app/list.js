@@ -3,4 +3,4 @@ $(document).ready(function () {
         var id = $(this).attr('task');
         $('#modal').load("/tasks/"+id+"/task_users");
     });
-});
+})

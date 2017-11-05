@@ -3,61 +3,62 @@
     <head>
         <meta charset="utf-8">
         <title>Company Lists</title>
+        {% load static %}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="{% static 'users_app/company.js' %}"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'users_app/company.css' %}" />
     </head>
     <body>
-        <h1>Company Lists</h1>
-        <a href="{%url 'users:index'%}">Your Lists</a> | {% if user.is_admin %}<a href="{%url 'users:admin'%}">Admin Page</a> | {% endif %}<a href="{%url 'users:logout'%}">Logout</a>
-        <h3>Lists</h3>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>List Title</th>
-                    <th># of Tasks</th>
-                    <th>Users</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% if all_lists %}
-                {% for list in all_lists %}
+    <div class="container-fluid">
+        <div class="links col-xs-12 ">
+            <div class="col-sm-9 empty">
+                <ul>
+                    <li><a href="{%url 'users:index'%}">My Lists</a></li>
+                    <li><a href="{%url 'users:company'%}" class="active">Company Lists</a></li>
+                    <li>{% if user.is_admin %}<a href="{%url 'users:admin'%}">Admin Page</a>{% endif %}</li>
+                </ul>
+            </div>
+            <div class="col-sm-3 logout">
+                <a href="{%url 'users:logout'%}">Logout</a>
+            </div>
+        </div>
+        <h1>{{ user.company.name }}</h1>
+        <div class="col-xs-12 table-responsive">
+            <table class="table table-striped">
+                <thead>
                     <tr>
-                        <td><a href="{%url 'lists:add' id=list.id%}">{{ list.title }}</a></td>
-                        <td>{{ list.num_tasks }}</td>
-                        <td>{{ list.users.count }}</td>
-                        <td>{% if list.creator == user %}
-                            {% if list.users.count < all_users.all.count%}
-                                <form action="{%url 'lists:adduser' id=list.id%}" method="POST">
-                                    {% csrf_token %}
-                                    <select name="user">
-                                        {% for oneuser in all_users %}
-                                            {% if oneuser != user %}
-                                                <option value="{{oneuser.id}}">{{oneuser.first_name}} {{oneuser.last_name}}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </select>
-                                    <input type="submit" value="add user"/>
-                                </form>
-                            {%endif%}
-                            {% if list.users.all.count > 1 %}
-                            <form action="{%url 'lists:removeuser' id=list.id%}" method="POST">
-                                {% csrf_token %}
-                                <select name="user">
-                                    <option value="" selected disabled hidden>Choose here</option>
-                                {% for one_user in all_users %}
-                                    {% if one_user in list.users.all and one_user != user %}
-                                        <option value="{{one_user.id}}">{{one_user.first_name}} {{one_user.last_name}}</option>
-                                    {% endif %}
-                                {% endfor %}
-                                </select>
-                                <input type="submit" value="Remove User"/>
-                            </form>
-                            {% endif %}
-                            <a href="{%url 'lists:delete' id=list.id%}">Delete</a>
-                        {% endif %}</td>
+                        <th class="col-xs-1"></th>
+                        <th class="col-xs-9"></th>
+                        <th class="col-xs-1"></th>
+                        <th class="col-xs-1"></th>
                     </tr>
-                {% endfor %}
-            {% endif %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% if all_lists %}
+                    {% for list in all_lists %}
+                        <tr>
+                            <td class="text-center">
+                                <span class="glyphicon glyphicon-th-list"></span> {{ list.num_tasks }}
+                            </td>
+                            <td><a href="{%url 'lists:add' id=list.id%}">{{ list.title }}</a></td>
+                            <td class="text-center">
+                                <div class="circle">
+                                    <button class="empty modal_toggle" list="{{list.id}}" data-toggle="modal" data-target="#modal">{{list.users.count}}</button>
+                                </div>
+                            </td>
+                            <td class="text-center">{% if list.creator == user %}
+                                <a href="{%url 'lists:delete' id=list.id%}"><span class="glyphicon glyphicon-trash"></span></a>
+                            {% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+        <div id="modal" class="modal fade" role="dialog">
+        </div>
+    </div>
     </body>
 </html>

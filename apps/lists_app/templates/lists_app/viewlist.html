@@ -108,7 +108,7 @@
                             <div class="circle">
                                 {% if task.creator == user %}
                                     <a href="{%url 'tasks:delete' id=task.id%}"><span class="glyphicon glyphicon-trash"></span></a>
-                                {% else %}
+                                {% elif user in this_list.users.all %}
                                     <form action="{%url 'tasks:removeuser' id=task.id%}" method="POST">
                                         {% csrf_token %}
                                         <input type="hidden" name="user" value="{{user.id}}"/>
@@ -132,6 +132,7 @@
                                 </div>
                             </td>
                             <td class="text-center">
+                                {% if user in this_list.users.all %}
                                 <div class="circle">
                                     {% if user != task.creator %}
                                     <form action="{%url 'tasks:adduser' id=task.id%}" method="POST">
@@ -143,6 +144,7 @@
                                     </form>
                                     {%endif%}
                                 </div>
+                                {%endif%}
                             </td>
                         </tr>
                     {% endfor %}
@@ -173,6 +175,7 @@
                         </tr>
                     {% endfor %}
                     </table>
+                    {% if user in this_list.users.all %}
                     {% if messages %}
                         {% for message in messages %}
                             {% if 'task' in message.tags %}
@@ -194,6 +197,7 @@
                             </div>
                         </div>
                     </form>
+                    {% endif %}
                 </div>
             </div>
         </div>

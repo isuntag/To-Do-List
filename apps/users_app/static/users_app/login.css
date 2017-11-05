@@ -28,6 +28,7 @@ a:hover {
     color: #434544;
     margin-bottom: 25px;
     text-align: center;
+    width: 100% !important;
 }
 input[type=submit] {
     background-color: #F7F7F7;
